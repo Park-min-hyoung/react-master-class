@@ -6,6 +6,6 @@ declare module "styled-components" {
   export interface DefaultTheme {
     textColor: string;
     bgColor: string;
-    accentCOlor: string;
+    accentColor: string;
   }
 }
