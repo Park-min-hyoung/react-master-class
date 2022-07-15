@@ -24,13 +24,29 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Btn = styled.div`
+  width: 65px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.accentColor};
+  display: flex;
   justify-content: center;
   align-items: center;
 `;
 
+const BackBtn = styled(Btn)``;
+
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
+`;
+
+const ModeBtn = styled(Btn)`
+  cursor: pointer;
 `;
 
 const Loader = styled.span`
@@ -160,17 +176,30 @@ function Coin() {
     }
   );
   const loading = infoLoading || tickersLoading;
+  const [color, setColor] = useState("#2f3640");
+  const updateBackColor = () => {
+    if (color === "#2f3640") {
+      setColor("wheat");
+    } else {
+      setColor("#2f3640");
+    }
+  };
   return (
     <Container>
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </title>
+        <style>{`body { background-color: ${color}; }`}</style>
       </Helmet>
       <Header>
+        <BackBtn>
+          <Link to="/">Back</Link>
+        </BackBtn>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <ModeBtn onClick={updateBackColor}>Change</ModeBtn>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -212,7 +241,7 @@ function Coin() {
           </Tabs>
 
           <Routes>
-            <Route path="price" element={<Price />}></Route>
+            <Route path="price" element={<Price coinId={coinId} />}></Route>
             <Route path="chart" element={<Chart coinId={coinId} />}></Route>
           </Routes>
         </>
