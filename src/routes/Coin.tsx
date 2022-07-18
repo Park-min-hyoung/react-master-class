@@ -9,7 +9,7 @@ import {
   Link,
   useMatch,
 } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
@@ -176,22 +176,16 @@ function Coin() {
     }
   );
   const loading = infoLoading || tickersLoading;
-  const [color, setColor] = useState("#2f3640");
-  const updateBackColor = () => {
-    if (color === "#2f3640") {
-      setColor("wheat");
-    } else {
-      setColor("#2f3640");
-    }
-  };
   return (
     <Container>
-      <Helmet>
-        <title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </title>
-        <style>{`body { background-color: ${color}; }`}</style>
-      </Helmet>
+      <HelmetProvider>
+        <Helmet>
+          <title>
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+          </title>
+        </Helmet>
+      </HelmetProvider>
+
       <Header>
         <BackBtn>
           <Link to="/">Back</Link>
@@ -199,7 +193,7 @@ function Coin() {
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
-        <ModeBtn onClick={updateBackColor}>Change</ModeBtn>
+        <ModeBtn>Change</ModeBtn>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -216,7 +210,7 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>Price:</span>
-              <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
+              <span>${tickersData?.quotes?.USD?.price?.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
